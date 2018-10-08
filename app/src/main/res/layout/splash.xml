@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffff"
+
+    >
+<ImageView
+    android:layout_width="295dp"
+    android:layout_height="295dp"
+    android:background="@drawable/earl"
+    android:id="@+id/imageView2"
+    android:layout_marginTop="26dp"
+    android:layout_alignParentTop="true"
+    android:layout_centerHorizontal="true" />
+<ImageView
+    android:layout_marginTop="12dp"
+    android:layout_width="260dp"
+    android:layout_height="85dp"
+    android:text="Find My Ride"
+    android:background="@drawable/findmyride"
+    android:fontFamily="casual"
+    android:textStyle="bold"
+    android:textSize="28dp"
+    android:layout_below="@+id/imageView2"
+    android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

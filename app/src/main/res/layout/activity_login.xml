@@ -7,51 +7,67 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/loginback"
     tools:context="com.example.anmol.findmyride.LoginActivity">
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/etUsername"
+        android:textColor="#ffff"
+        android:textSize="20dp"
+        android:fontFamily="casual"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="Username" />
+        android:hint="Username"
+        android:textColorHint="#7e7e7e"
+
+        />
 
     <EditText
+        android:textSize="20dp"
+
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:ems="10"
+        android:textColor="#ffff"
         android:id="@+id/etPassword"
         android:layout_below="@+id/etUsername"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:hint="Password" />
+        android:hint="Password"
+        android:textColorHint="#7e7e7e"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         android:text="Login"
+        android:fontFamily="casual"
         android:id="@+id/bLogin"
         android:layout_below="@+id/etPassword"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="60dp"
-        android:textColor="#ffff"
-        android:background="@color/colorPrimaryDark" />
+        android:textColor="#fafafa"
+        android:background="#003d5c"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="45dp"
+        android:fontFamily="casual"
         android:text="Register"
+        android:textStyle="bold"
         android:id="@+id/bRegister"
-        android:textColor="#ffff"
-        android:background="@color/colorAccent"
+        android:textColor="#003d5c"
+        android:background="#fafafa"
         android:layout_alignTop="@+id/bLogin"
         android:layout_alignRight="@+id/etPassword"
         android:layout_alignEnd="@+id/etPassword" />

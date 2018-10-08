@@ -11,17 +11,42 @@
 
     <uses-permission android:name="android.permission.READ_SMS" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/carr"
+        android:icon="@drawable/truck"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <receiver android:name=".MessageReceiver">
+            <intent-filter>
+                <action android:name="com.example.anmol.findmyride.MainActivity" />
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".LoginActivity"
+            android:label="Login"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".RegisterActivity"
+            android:label="Register"
+            android:parentActivityName=".LoginActivity" />
+        <activity
+            android:name=".UserAreaActivity"
+            android:label="My Profile" />
+        <activity
+            android:name=".MyAccount"
+            android:label="Recharge"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SplashScreen"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,29 +54,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver android:name=".MessageReceiver">
-            <intent-filter>
-                <action android:name="com.example.anmol.findmyride.MainActivity"/>
-                <action android:name="android.provider.Telephony.SMS_RECEIVED"
-                    />
-
-            </intent-filter>
-
-
-        </receiver>
-
-
-        <activity android:name=".LoginActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="Login"/>
-        <activity android:name=".RegisterActivity"
-            android:parentActivityName=".LoginActivity"
-            android:label="Register"/>
-        <activity android:name=".UserAreaActivity"
-            android:label="My Profile">
-
-        </activity>
+        <activity
+            android:name=".MyLocation"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".MyLocation2" />
+        <activity
+            android:name=".AP"
+            android:label="@string/title_activity_ap"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

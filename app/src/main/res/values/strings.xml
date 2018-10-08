@@ -14,4 +14,6 @@
     <string name="title_activity_recieve_sms">RecieveSms</string>
     <string name="title_activity_sms1">Sms1</string>
     <string name="title_activity_intent_receiver">IntentReceiver</string>
+    <string name="title_activity_my_location">MyLocation</string>
+    <string name="title_activity_ap">AP</string>
 </resources>

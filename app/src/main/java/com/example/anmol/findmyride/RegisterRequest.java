@@ -23,9 +23,6 @@ public class RegisterRequest extends StringRequest
         params.put("username",username);
         params.put("phone",phone);
         params.put("password",password);
-
-
-
     }
 
     @Override

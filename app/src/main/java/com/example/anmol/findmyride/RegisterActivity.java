@@ -45,6 +45,7 @@ public class RegisterActivity extends AppCompatActivity
         final EditText etName = (EditText) findViewById(R.id.etName);
         final EditText etUsername = (EditText) findViewById(R.id.etUsername);
         final EditText etPassword = (EditText) findViewById(R.id.etPassword);
+        final EditText etConfirmPassword = (EditText) findViewById(R.id.etConfirmPassword);
         final Button bRegister = (Button) findViewById(R.id.bRegister);
 
         bRegister.setOnClickListener(
@@ -62,44 +63,50 @@ public class RegisterActivity extends AppCompatActivity
                             final String username = etUsername.getText().toString();
                             final String phone = etAge.getText().toString();
                             final String password = etPassword.getText().toString();
+                            final String confirmPass = etConfirmPassword.getText().toString();
                             if (name.equals("") || password.equals("") || username.equals("") || phone.equals("")) {
                                 Toast.makeText(RegisterActivity.this, "Fill in all the details", Toast.LENGTH_SHORT).show();
                             } else {
                                 if (password.length() < 6) {
                                     Toast.makeText(RegisterActivity.this, "Password should have atleast 6 characters", Toast.LENGTH_SHORT).show();
                                 } else {
-                                    if (phone.length() != 10) {
-                                        Toast.makeText(RegisterActivity.this, "Please enter a valid number " + "\n" + "(Do not include country code)", Toast.LENGTH_LONG).show();
+                                    if (!password.equals(confirmPass)) {
+                                    Toast.makeText(RegisterActivity.this,"Passwords don't match",Toast.LENGTH_SHORT).show();
                                     } else {
-                                        Response.Listener<String> responseListener =
-                                                new Response.Listener<String>() {
-                                                    @Override
-                                                    public void onResponse(String response) {
-                                                        try {
-                                                            JSONObject jsonResponse = new JSONObject(response);
-                                                            String success = jsonResponse.getString("success");
-                                                            if (success.equals("success")) {
-                                                                Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
-                                                                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                                                                RegisterActivity.this.startActivity(intent);
-                                                            } else if (success.equals("username")) {
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                                builder.setMessage("Username already exists").setNegativeButton("Retry", null).create().show();
-                                                            } else if (success.equals("phone")) {
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                                builder.setMessage("Phone number already Registered").setNegativeButton("Retry", null).create().show();
-                                                            } else {
-                                                                AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                                                                builder.setMessage("Registration failed please try again later").setNegativeButton("Retry", null).create().show();
+                                        if (phone.length() != 10) {
+                                            Toast.makeText(RegisterActivity.this, "Please enter a valid number " + "\n" + "(Do not include country code)", Toast.LENGTH_LONG).show();
+                                        } else {
+                                            Response.Listener<String> responseListener =
+                                                    new Response.Listener<String>() {
+                                                        @Override
+                                                        public void onResponse(String response) {
+                                                            try {
+                                                                JSONObject jsonResponse = new JSONObject(response);
+                                                                String success = jsonResponse.getString("success");
+                                                                if (success.equals("success")) {
+                                                                    Toast.makeText(RegisterActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                                                                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                                                                    RegisterActivity.this.startActivity(intent);
+                                                                } else if (success.equals("username")) {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                                    builder.setMessage("Username already exists").setNegativeButton("Retry", null).create().show();
+                                                                } else if (success.equals("phone")) {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                                    builder.setMessage("Phone number already Registered").setNegativeButton("Retry", null).create().show();
+                                                                } else {
+                                                                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                                                                    builder.setMessage("Registration failed please try again later").setNegativeButton("Retry", null).create().show();
+                                                                }
+                                                            } catch (JSONException e) {
+                                                                e.printStackTrace();
                                                             }
-                                                        } catch (JSONException e) {
-                                                            e.printStackTrace();
                                                         }
-                                                    }
-                                                };
-                                        RegisterRequest registerRequest = new RegisterRequest(name, username, phone, password, responseListener);
-                                        RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
-                                        queue.add(registerRequest);
+                                                    };
+                                            RegisterRequest registerRequest = new RegisterRequest(name, username, phone, password, responseListener);
+                                            RequestQueue queue = Volley.newRequestQueue(RegisterActivity.this);
+                                            queue.add(registerRequest);
+
+                                        }
                                     }
                                 }
                             }

@@ -29,9 +29,8 @@ public class UserAreaActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         String username = intent.getStringExtra("username");
         final String phone=intent.getStringExtra("phone");
-
+       // SharedPreferencesCompat.EditorCompat editorCompat
         helper.insertPhone(phone);
-
         String message = "Welcome "+name;
         tvWelcomeMsg.setText(message);
         etUsername.setText(username);

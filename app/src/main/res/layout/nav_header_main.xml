@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="170dp"
+    android:layout_height="180dp"
     android:background="@drawable/back"
     android:gravity="bottom"
     android:orientation="vertical"
@@ -9,21 +9,29 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="95dp"
-        android:layout_height="85dp"
+        android:layout_width="90dp"
+        android:src="@drawable/truck"
+        android:layout_height="90dp"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
-        android:src="@drawable/carr" />
+        />
 
    <TextView
+       android:layout_marginTop="5dp"
+       android:layout_marginLeft="7dp"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="Find My Ride"/>
+       android:text="Find My Ride"
+       android:fontFamily="casual"
+       android:textColor="#ffff"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="findMyRide.com"/>
+        android:text="findMyRide.com"
+        android:fontFamily="casual"
+        android:textColor="#ffff"/>
 </LinearLayout>

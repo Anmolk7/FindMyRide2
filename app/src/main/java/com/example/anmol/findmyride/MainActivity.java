@@ -33,8 +33,16 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import org.ejml.simple.SimpleMatrix;
+
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    String c="";
+    String cordi;
+    Databasehelper db= new Databasehelper(this);
     private Button b;
     Intent intent = null;
     private TextView t;
@@ -56,11 +64,11 @@ public class MainActivity extends AppCompatActivity
 
         }
     };
-   public String getText()
+    public String getText()
     {
         t=(TextView) findViewById(R.id.textView);
         t.setTextIsSelectable(true);
-         String text=t.getText().toString();
+        String text=t.getText().toString();
         return text;
     }
 
@@ -69,13 +77,18 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        cordi= db.cordinates().toString();
         intentFilter = new IntentFilter();
         intentFilter.addAction("SMS_RECEIVED_ACTION");
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        Databasehelper db= new Databasehelper(this);
+        String co=db.cordinates();
         t = (TextView) findViewById(R.id.textView);
         t.setTextIsSelectable(true);
+        t.setText(co);
+
+
         //final String text=t.getText().toString();
         requestQueue = Volley.newRequestQueue(this);
 
@@ -193,23 +206,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        // this code won't execute IF permissions are not allowed, because in the line above there is return statement.
 
-        b.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-
-            public void onClick(View view) {
-
-                // t=(TextView) findViewById(R.id.textView);
-                //noinspection MissingPermission
-
-                locationManager.requestLocationUpdates("gps", 5000, 0, listener);
-
-
-            }
-
-        });
 
     }
 
@@ -243,20 +240,152 @@ public class MainActivity extends AppCompatActivity
 
 
     }*/
-   public void call(View view) {
-       Intent callIntent = new Intent(Intent.ACTION_CALL); //use ACTION_CALL class
-       //  Toast.makeText(MainActivity.this,sf.getString(saveIt,""),Toast.LENGTH_SHORT).show();
-       // if(sf.getString(saveIt,"").equals("")||sf.getString(saveIt,"").equals
+   public void predict(View view) {
+
+       Databasehelper db = new Databasehelper(this);
+       cordi = db.pCordinates().toString();
+       if (cordi.equals("")) {
+           Toast.makeText(MainActivity.this, "No coordinates recieved", Toast.LENGTH_SHORT).show();
+       } else {
+           TextView prr = (TextView) findViewById(R.id.textView);
+           double dt = 1;
+
+
+           try {
+               String[] parts = cordi.split(",");
+               String part1 = parts[0]; // 004
+               String part2 = parts[1]; // 034556
+
+
+               double xPos = Double.parseDouble(part1);
+               //27.65656565;
+               double yPos = Double.parseDouble(part2);
+               /// /85.26565656;
+               double xSpd = 0.0000013;
+               double ySpd = 0.0;
+               SimpleMatrix x = new SimpleMatrix(new double[][]{{xPos}, {yPos}, {xSpd}, {ySpd}});
+
+               double devPos = 2.5;
+               double devSpd = 1.5;
+               Measurement[] rec = Measurement.create(dt, dt * 10, 2, xPos, yPos, devPos, xSpd, ySpd, devSpd);
+
+               double maxAcc = 0.5;
+
+               // process matrix
+               SimpleMatrix A = null;
+
+               // observation matrix
+               SimpleMatrix H = new SimpleMatrix(new double[][]{
+                       {1, 0, 0, 0},
+                       {0, 1, 0, 0},
+                       {0, 0, 1, 0},
+                       {0, 0, 0, 1}});
+
+               // identity matrix
+               SimpleMatrix I = SimpleMatrix.identity(4);
+
+               // kalman gain
+               SimpleMatrix K = new SimpleMatrix(4, 4);
+
+               // initial state covariance estimate
+               double xp = 1.0;
+               SimpleMatrix P = SimpleMatrix.diag(xp, xp, xp, xp);
+
+               // process noise (disturbance)
+               SimpleMatrix Q = null;
+
+               // observation noise (uncertainties) - sensors only, to be estimated in advance in real life
+               SimpleMatrix R = SimpleMatrix.diag(devPos * devPos, devPos * devPos, devSpd * devSpd, devSpd * devSpd);
+
+               // observation (aka measurement)
+               SimpleMatrix z = null;
+
+               // just for storing the results
+               ArrayList<Estimate> store = new ArrayList<Estimate>();
+
+               // kalman filter implementation
+               for (int i = 1; i < rec.length; i++) {
+
+                   // PREDICTION STEP
+
+                   // process
+                   A = A(rec[i].dt);
+                   // project state ahead
+                   x = A.mult(x);
+                   // process noise
+                   Q = Q(rec[i].dt, maxAcc);
+                   // project error covariance ahead
+                   P = (A.mult(P).mult(A.transpose())).plus(Q);
+
+                   // measurement
+                   z = rec[i].toMeasurement();
+
+                   // CORRECTION STEP
+
+                   if (rec[i].update) {
+                       // calculate kalman gain
+                       K = (P.mult(H.transpose())).mult((H.mult(P).mult(H.transpose()).plus(R)).invert());
+                       // update estimate
+                       x = x.plus(K.mult(z.minus(H.mult(x))));
+                       // update error covariance
+                       P = (I.minus(K.mult(H))).mult(P);
+                   }
+
+                   // store estimates for "later on"-check
+                   Estimate e = new Estimate(rec[i].t, x, z, K);
+
+                   c = e.co().toString();
+
+                   //store.add(new Estimate(rec[i].t, x, z, K));
+
+               }
+               //return c;
+               String[] splitCordinates = c.split(",");
+
+               String split1 = parts[0]; // 004
+               String split2 = parts[1]; // 034556
+               String lat = split1.substring(0, 9);
+               String lng = split2.substring(0, 9);
+               String latlng = lat + "," + lng;
+               db.insertPCordinates(c);
+               prr.setText(latlng);
+
+           }
+           catch (Exception e)
+           {
+               Toast.makeText(MainActivity.this,"Invalid Coordinates",Toast.LENGTH_SHORT).show();
+           }
+       }
+   }
+
+    // process matrix
+    public static SimpleMatrix A(double t) {
+        return new SimpleMatrix(new double[][] {
+                { 1, 0, t, 0 },
+                { 0, 1, 0, t },
+                { 0, 0, 1, 0 },
+                { 0, 0, 0, 1 }
+        });
+    }
+
+    // process noise variance matrix
+    public static SimpleMatrix Q(double t, double maxA) {
+        double xy = 0.5*(t*t);
+        SimpleMatrix _Q = new SimpleMatrix(new double[][] { {xy}, {xy}, {t}, {t} });
+        return _Q.mult(_Q.transpose()).scale(maxA*maxA);
+    }
+
+    public void call(View view) {
+       Intent callIntent = new Intent(Intent.ACTION_CALL);
        Databasehelper db= new Databasehelper(this);
        String no=db.display().toString();
        if(no.equals(""))
        {
-           //
 
            startActivity(new Intent(MainActivity.this,LoginActivity.class));
            Toast.makeText(MainActivity.this,"Please Login",Toast.LENGTH_SHORT).show();
        }
-       //
+
        else
        {
 
@@ -413,7 +542,9 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_gallery)
         {
 
-            //startActivity(new Intent(MainActivity.this,Sms1.class));
+            startActivity(new Intent(MainActivity.this,MyLocation.class));
+
+
         }
         else if(id==R.id.nav_share)
         {
@@ -422,6 +553,10 @@ public class MainActivity extends AppCompatActivity
         else if (id == R.id.nav_send) {
 
             sendSMS();
+        }
+        else if (id == R.id.nav_account) {
+
+            startActivity(new Intent(MainActivity.this,MyAccount.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

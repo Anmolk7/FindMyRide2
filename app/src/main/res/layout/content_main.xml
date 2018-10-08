@@ -8,6 +8,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@drawable/blackmap1"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.anmol.findmyride.MainActivity"
     tools:showIn="@layout/app_bar_main">
@@ -17,8 +18,9 @@
         android:layout_height="wrap_content"
         android:text="Coordinates"
         android:id="@+id/co"
-        android:textColor="#000"
-
+        android:textStyle="bold"
+        android:textColor="#ffff"
+        android:fontFamily="casual"
         android:textSize="25dp"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/button"
@@ -31,25 +33,24 @@
 
     <Button
 
-        android:layout_width="150dp"
-        android:background="#016ca0"
-        android:textColor="#fff"
+        android:layout_width="167dp"
+        android:background="#003d5c"
+        android:textColor="#ffff"
+        android:fontFamily="casual"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        android:text="Request Location"
+        android:textStyle="bold"
+        android:text="Predict Location"
         android:layout_marginTop="70dp"
         android:textSize="15dp"
-
-
+        android:onClick="predict"
         android:id="@+id/button"
-
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
 
 
     <TextView
-
+        android:fontFamily="casual"
         android:layout_width="match_parent"
 
         android:gravity="center"
@@ -58,24 +59,25 @@
 
         android:textIsSelectable="true"
 
-        android:textSize="25sp"
-
+        android:textSize="22sp"
+        android:textColor="#ffa500"
         android:id="@+id/textView"
 
         android:layout_below="@+id/co"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="13dp" />
 
     <ImageButton
         android:layout_width="65dp"
         android:layout_height="65dp"
         android:id="@+id/call"
-        android:background="@drawable/callfinal"
+        android:background="@drawable/bluecall"
         android:onClick="call"
+        android:layout_marginTop="63dp"
         android:layout_below="@+id/textView"
-        android:layout_alignRight="@+id/textView"
-        android:layout_alignEnd="@+id/textView"
-        android:layout_marginTop="81dp" />
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,6 +86,7 @@
         android:id="@+id/smsbutt"
         android:layout_below="@+id/call"
         android:layout_centerHorizontal="true" />
+
 
 
 

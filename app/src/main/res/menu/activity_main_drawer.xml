@@ -8,12 +8,16 @@
             android:title="Login" />
         <item
             android:id="@+id/nav_gallery"
-            android:icon="@drawable/settings"
-            android:title="Settings" />
+            android:icon="@drawable/gpsnavbar"
+            android:title="My Loaction" />
         <item
             android:id="@+id/nav_slideshow"
             android:icon="@drawable/help"
             android:title="Help" />
+        <item
+            android:id="@+id/nav_account"
+            android:icon="@drawable/dollar"
+            android:title="My Account"/>
 
     </group>
 
@@ -22,7 +26,8 @@
             <item
                 android:id="@+id/nav_share"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+                android:title="Share"
+                />
             <item
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
